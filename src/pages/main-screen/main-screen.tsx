@@ -1,4 +1,3 @@
-import React from 'react';
 import { ClipLoader } from 'react-spinners';
 import {TabsSection} from '../../components/tabs-section/tabs-section.tsx';
 import {CitiesContainer} from '../../components/cities-container/cities-container.tsx';
@@ -7,7 +6,7 @@ import {useAppSelector} from '../../hooks';
 import {Header} from '../../components/header/header.tsx';
 import {selectAppLoadingState} from '../../store/selectors';
 
-const MainScreen = React.memo(() => {
+const MainScreen = () => {
   const { authStatus, offersLoading } = useAppSelector(selectAppLoadingState);
 
   if (offersLoading || authStatus === AuthorizationStatus.Unknown) {
@@ -24,8 +23,6 @@ const MainScreen = React.memo(() => {
       </main>
     </div>
   );
-});
-
-MainScreen.displayName = 'MainScreen';
+};
 
 export default MainScreen;

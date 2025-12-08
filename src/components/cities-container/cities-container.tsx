@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import {useState, useCallback} from 'react';
 import {PlacesSection} from '../places-section/places-section.tsx';
 import {MapSection} from '../map-section/map-section.tsx';
 import {OfferListItem} from '../../types/offer-list-item.ts';
@@ -9,7 +9,7 @@ import {
   selectOffersCityCountStable
 } from '../../store/selectors';
 
-export const CitiesContainer = React.memo(() => {
+export const CitiesContainer = () => {
   const [activeOffer, setActiveOffer] = useState<OfferListItem | null>(null);
 
   const handleMouseOverOffer = useCallback((offer: OfferListItem | null) => {
@@ -35,6 +35,4 @@ export const CitiesContainer = React.memo(() => {
       </div>
     </div>
   );
-});
-
-CitiesContainer.displayName = 'CitiesContainer';
+};

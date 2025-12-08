@@ -4,10 +4,11 @@ import {ToastContainer} from 'react-toastify';
 import ReactDOM from 'react-dom/client';
 import {store} from './store';
 import App from './components/app/app.tsx';
-import {checkAuthAction, fetchOffersAction} from './store/api-actions.ts';
+import {checkAuthAction, fetchOffersAction, fetchFavoritesAction} from './store/api-actions.ts';
 
 store.dispatch(fetchOffersAction());
 store.dispatch(checkAuthAction());
+store.dispatch(fetchFavoritesAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

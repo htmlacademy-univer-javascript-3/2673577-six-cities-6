@@ -4,6 +4,7 @@ import {offersData} from './slices/offers-data.ts';
 import {offerData} from './slices/offer-data.ts';
 import {reviewsData} from './slices/reviews-data.ts';
 import {userProcess} from './slices/user-process.ts';
+import {favoriteData} from './slices/favorite-data.ts';
 
 export const rootReducer = combineReducers({
   cityProcess: cityProcess.reducer,
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
   offerData: offerData.reducer,
   reviewsData: reviewsData.reducer,
   userProcess: userProcess.reducer,
+  favoriteData: favoriteData.reducer,
 });

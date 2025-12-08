@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {OfferListItem} from '../../types/offer-list-item.ts';
 import {AppRoute} from '../../const.ts';
+import {BookmarkButton} from '../bookmark-button/bookmark-button.tsx';
 
 
 type CardImageSize = 'small' | 'large';
@@ -36,12 +37,12 @@ const CitiesCard = React.memo<CitiesCardProps>(
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button>
+          <BookmarkButton
+            offerId={offer.id}
+            className="place-card"
+            width={18}
+            height={19}
+          />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
@@ -59,12 +60,10 @@ const CitiesCard = React.memo<CitiesCardProps>(
     </article>
   ),
   (prevProps, nextProps) =>
-    (
-      prevProps.offer.id === nextProps.offer.id &&
-      prevProps.className === nextProps.className &&
-      prevProps.sizeImg === nextProps.sizeImg &&
-      prevProps.handleMouseOverOffer === nextProps.handleMouseOverOffer
-    )
+    prevProps.offer.id === nextProps.offer.id &&
+    prevProps.className === nextProps.className &&
+    prevProps.sizeImg === nextProps.sizeImg &&
+    prevProps.handleMouseOverOffer === nextProps.handleMouseOverOffer
 );
 
 CitiesCard.displayName = 'CitiesCard';

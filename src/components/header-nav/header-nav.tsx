@@ -3,10 +3,12 @@ import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {logoutAction} from '../../store/api-actions.ts';
-import {selectAuthorizationStatus} from '../../store/selectors';
+import {selectAuthorizationStatus, selectFavoriteCount, selectUser} from '../../store/selectors';
 
-export const HeaderNav = React.memo(() => {
+export const HeaderNav = () => {
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const favoriteCount = useAppSelector(selectFavoriteCount);
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
   const handleLogout = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
@@ -20,10 +22,10 @@ export const HeaderNav = React.memo(() => {
         <li className="header__nav-item user">
           <Link to={AppRoute.Favorites} className="header__nav-link header__nav-link--profile">
             <div className="header__avatar-wrapper user__avatar-wrapper"/>
-            {authorizationStatus === AuthorizationStatus.Auth && (
+            {authorizationStatus === AuthorizationStatus.Auth && user && (
               <>
-                <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                <span className="header__favorite-count">3</span>
+                <span className="header__user-name user__name">{user.email}</span>
+                <span className="header__favorite-count">{favoriteCount}</span>
               </>
             )}
           </Link>
@@ -38,6 +40,4 @@ export const HeaderNav = React.memo(() => {
       </ul>
     </nav>
   );
-});
-
-HeaderNav.displayName = 'HeaderNav';
+};

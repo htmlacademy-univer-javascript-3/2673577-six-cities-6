@@ -1,11 +1,11 @@
-import React, {useCallback} from 'react';
+import {useCallback} from 'react';
 import classNames from 'classnames';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeCity} from '../../store/slices/city-process.ts';
 import {CITIES} from '../../const.ts';
 import {selectCity} from '../../store/selectors';
 
-export const ListCities = React.memo(() => {
+export const ListCities = () => {
   const cityState = useAppSelector(selectCity);
   const dispatch = useAppDispatch();
 
@@ -28,6 +28,4 @@ export const ListCities = React.memo(() => {
       ))}
     </ul>
   );
-});
-
-ListCities.displayName = 'ListCities';
+};
