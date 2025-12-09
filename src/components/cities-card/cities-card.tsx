@@ -1,3 +1,4 @@
+import React from 'react';
 import {Link} from 'react-router-dom';
 import {OfferListItem} from '../../types/offer-list-item.ts';
 import {AppRoute} from '../../const.ts';
@@ -17,8 +18,8 @@ const sizeMap: Record<CardImageSize, { width: string; height: string }> = {
   large: {width: '260', height: '200'},
 };
 
-function CitiesCard({offer, handleMouseOverOffer, className, sizeImg }: CitiesCardProps) {
-  return (
+const CitiesCard = React.memo<CitiesCardProps>(
+  ({offer, handleMouseOverOffer, className, sizeImg }) => (
     <article className={`${className}__card place-card`} onMouseOver={() => handleMouseOverOffer?.(offer)}
       onMouseLeave={() => handleMouseOverOffer?.(null)}
     >
@@ -56,7 +57,16 @@ function CitiesCard({offer, handleMouseOverOffer, className, sizeImg }: CitiesCa
         <p className="place-card__type">{offer.type}</p>
       </div>
     </article>
-  );
-}
+  ),
+  (prevProps, nextProps) =>
+    (
+      prevProps.offer.id === nextProps.offer.id &&
+      prevProps.className === nextProps.className &&
+      prevProps.sizeImg === nextProps.sizeImg &&
+      prevProps.handleMouseOverOffer === nextProps.handleMouseOverOffer
+    )
+);
+
+CitiesCard.displayName = 'CitiesCard';
 
 export default CitiesCard;

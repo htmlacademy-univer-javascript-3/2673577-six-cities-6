@@ -1,4 +1,4 @@
-import {useRef, useEffect} from 'react';
+import {useRef, useEffect, useMemo, memo} from 'react';
 import {Icon, Marker, layerGroup} from 'leaflet';
 import useMap from '../../hooks/use-map';
 import {OfferListItem, OfferListItems} from '../../types/offer-list-item.ts';
@@ -24,17 +24,18 @@ const currentCustomIcon = new Icon({
   iconAnchor: [20, 40]
 });
 
-
 const sizeMap: Record<ScreenMapSize, { width: string; height: string }> = {
   main: {width: '512px', height: '555px'},
   offer: {width: '1144px', height: '579px'},
 };
 
-function CityMap(props: MapProps) {
+const CityMap = memo((props: MapProps) => {
   const {offers, selectedOffer, screen} = props;
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, selectedOffer?.city.location);
+
+  const selectedOfferId = useMemo(() => selectedOffer?.id, [selectedOffer?.id]);
 
   useEffect(() => {
     if (map) {
@@ -47,7 +48,7 @@ function CityMap(props: MapProps) {
 
         marker
           .setIcon(
-            selectedOffer !== undefined && offer.id === selectedOffer?.id
+            selectedOfferId !== undefined && offer.id === selectedOfferId
               ? currentCustomIcon
               : defaultCustomIcon
           )
@@ -58,15 +59,34 @@ function CityMap(props: MapProps) {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, selectedOffer]);
+  }, [map, offers, selectedOfferId]);
+
+  const mapStyle = useMemo(() => ({
+    ...sizeMap[screen],
+    margin: '0 auto'
+  }), [screen]);
 
   return (
     <div
       ref={mapRef}
-      style={{...sizeMap[screen], margin: '0 auto',}}
+      style={mapStyle}
     />
   );
+}, (prevProps, nextProps) => {
+  if (prevProps.screen === 'offer' && nextProps.screen === 'offer') {
+    return (
+      prevProps.offers === nextProps.offers &&
+      prevProps.selectedOffer?.id === nextProps.selectedOffer?.id
+    );
+  }
 
-}
+  return (
+    prevProps.screen === nextProps.screen &&
+    prevProps.offers === nextProps.offers &&
+    prevProps.selectedOffer?.id === nextProps.selectedOffer?.id
+  );
+});
+
+CityMap.displayName = 'CityMap';
 
 export default CityMap;

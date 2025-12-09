@@ -8,11 +8,12 @@ import OfferScreen from '../../pages/offer-screen/offer-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
+import {selectAuthorizationStatus, selectIsOffersLoading, selectOffers} from '../../store/selectors.ts';
 
 function App() {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const offersState = useAppSelector((state) => state.offersCity);
-  const isOffersLoading = useAppSelector((state) => state.isOffersLoading);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const offersState = useAppSelector(selectOffers);
+  const isOffersLoading = useAppSelector(selectIsOffersLoading);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isOffersLoading) {
     return (
@@ -25,7 +26,7 @@ function App() {
       <Routes>
         <Route
           path={AppRoute.Root}
-          element={<MainScreen offers={offersState}/>}
+          element={<MainScreen/>}
         />
         <Route
           path={AppRoute.Login}

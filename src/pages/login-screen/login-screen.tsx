@@ -3,6 +3,7 @@ import {FormEvent, useEffect, useRef} from 'react';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loginAction} from '../../store/api-actions.ts';
+import {selectAuthorizationStatus} from '../../store/selectors.ts';
 
 function LoginScreen() {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -11,7 +12,7 @@ function LoginScreen() {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 

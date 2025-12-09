@@ -1,20 +1,25 @@
+import React, {useCallback} from 'react';
 import classNames from 'classnames';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {changeCity} from '../../store/action.ts';
+import {changeCity} from '../../store/slices/city-process.ts';
 import {CITIES} from '../../const.ts';
+import {selectCity} from '../../store/selectors';
 
-export function ListCities() {
-  const cityState = useAppSelector((state) => state.city);
+export const ListCities = React.memo(() => {
+  const cityState = useAppSelector(selectCity);
   const dispatch = useAppDispatch();
-  const handleUserAnswer = (city: string) => {
-    dispatch(changeCity({city: city}));
-  };
+
+  const handleCityChange = useCallback((city: string) => {
+    dispatch(changeCity(city));
+  }, [dispatch]);
+
   return (
     <ul className="locations__list tabs__list">
       {Object.values(CITIES).map((city) => (
         <li key={city} className="locations__item">
-          <a className={classNames('locations__item-link', 'tabs__item', {'tabs__item--active': cityState === city,})}
-            onClick={() => handleUserAnswer(city)}
+          <a
+            className={classNames('locations__item-link', 'tabs__item', {'tabs__item--active': cityState === city})}
+            onClick={() => handleCityChange(city)}
             href="#"
           >
             <span>{city}</span>
@@ -23,4 +28,6 @@ export function ListCities() {
       ))}
     </ul>
   );
-}
+});
+
+ListCities.displayName = 'ListCities';

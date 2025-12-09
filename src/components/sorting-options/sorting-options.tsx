@@ -1,18 +1,20 @@
+import React, {useState, useCallback} from 'react';
+import {useStore} from 'react-redux';
 import classNames from 'classnames';
-import {useEffect, useState} from 'react';
-import {loadOffers} from '../../store/action.ts';
+import {loadOffers} from '../../store/slices/offers-data.ts';
 import {OfferListItems} from '../../types/offer-list-item.ts';
-import {useAppDispatch, useAppSelector} from '../../hooks';
+import {useAppDispatch} from '../../hooks';
+import {selectOffers, selectOriginalOffers} from '../../store/selectors';
+import {State} from '../../types/state.ts';
 
-export function SortingOptions() {
-  const offersState = useAppSelector((state) => state.offersCity);
-  const cityState = useAppSelector((state) => state.city);
+export const SortingOptions = React.memo(() => {
   const dispatch = useAppDispatch();
+  const store = useStore<State>();
 
   const [selectedSort, setSelectedSort] = useState('Popular');
   const [openedSort, setOpenedSort] = useState(false);
 
-  const sortedOffers = (offers: OfferListItems, sortType: string) => {
+  const sortedOffers = useCallback((offers: OfferListItems, sortType: string) => {
     const sorted = [...offers];
     switch (sortType) {
       case 'Price: low to high':
@@ -28,22 +30,38 @@ export function SortingOptions() {
         break;
     }
     return sorted;
-  };
+  }, []);
 
-  useEffect(() => {
-    setSelectedSort('Popular');
-  }, [cityState]);
+  const handleSortChange = useCallback((sortType: string, currentSort: string) => {
+    setOpenedSort((prev) => !prev);
 
-  const handleSortChange = (sortType: string) => {
+    if (currentSort === sortType) {
+      return;
+    }
+
     setSelectedSort(sortType);
-    setOpenedSort(!openedSort);
-    dispatch(loadOffers({offersCity: sortedOffers(offersState, sortType)}));
-  };
+
+
+    const state = store.getState();
+    const currentOffers = selectOffers(state);
+    const originalOffers = selectOriginalOffers(state);
+
+
+    if (sortType === 'Popular') {
+      dispatch(loadOffers(originalOffers));
+    } else {
+      dispatch(loadOffers(sortedOffers(currentOffers, sortType)));
+    }
+  }, [dispatch, sortedOffers, store]);
+
+  const handleToggleSort = useCallback(() => {
+    setOpenedSort((prev) => !prev);
+  }, []);
 
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={() => setOpenedSort(!openedSort)}>
+      <span className="places__sorting-type" tabIndex={0} onClick={handleToggleSort}>
         {selectedSort}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
@@ -55,7 +73,7 @@ export function SortingOptions() {
             key={option}
             className={classNames('places__option', {'places__option--active': selectedSort === option})}
             tabIndex={0}
-            onClick={() => handleSortChange(option)}
+            onClick={() => handleSortChange(option, selectedSort)}
           >
             {option}
           </li>
@@ -63,4 +81,6 @@ export function SortingOptions() {
       </ul>
     </form>
   );
-}
+});
+
+SortingOptions.displayName = 'SortingOptions';

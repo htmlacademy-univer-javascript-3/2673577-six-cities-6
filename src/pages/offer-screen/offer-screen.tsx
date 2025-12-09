@@ -11,6 +11,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchOfferAction, fetchOfferNeighbourhoodAction, fetchReviewAction} from '../../store/api-actions.ts';
 import {Header} from '../../components/header/header.tsx';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
+import {selectAuthorizationStatus, selectIsOfferLoading, selectOffer, selectOfferError, selectOfferNeighborhood, selectReviews} from '../../store/selectors.ts';
 
 type OfferScreenProps = {
   offers: OfferListItems;
@@ -19,13 +20,13 @@ type OfferScreenProps = {
 function OfferScreen({offers}: OfferScreenProps) {
   const {id} = useParams<{ id: string }>();
 
-  const currentOffer = useAppSelector((state) => state.offer);
-  const offerLoading = useAppSelector((state) => state.offerLoading);
-  const offerError = useAppSelector((state) => state.offerError);
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const currentOffer = useAppSelector(selectOffer);
+  const offerLoading = useAppSelector(selectIsOfferLoading);
+  const offerError = useAppSelector(selectOfferError);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
-  const reviews = useAppSelector((state) => state.reviews);
-  const offerNeighbourhood = useAppSelector((state) => state.offerNeighborhood);
+  const reviews = useAppSelector(selectReviews);
+  const offerNeighbourhood = useAppSelector(selectOfferNeighborhood);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
