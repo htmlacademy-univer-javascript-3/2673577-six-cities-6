@@ -16,6 +16,7 @@ export enum APIRoute {
   Reviews = '/comments',
   Login = '/login',
   Logout = '/logout',
+  Favorites = '/favorite',
 }
 
 export const CITIES = {

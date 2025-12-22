@@ -12,6 +12,7 @@ import {fetchOfferAction, fetchOfferNeighbourhoodAction, fetchReviewAction} from
 import {Header} from '../../components/header/header.tsx';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {selectAuthorizationStatus, selectIsOfferLoading, selectOffer, selectOfferError, selectOfferNeighborhood, selectReviews} from '../../store/selectors.ts';
+import {BookmarkButton} from '../../components/bookmark-button/bookmark-button.tsx';
 
 type OfferScreenProps = {
   offers: OfferListItems;
@@ -63,12 +64,14 @@ function OfferScreen({offers}: OfferScreenProps) {
                 <h1 className="offer__name">
                   {currentOffer?.title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                {currentOffer && (
+                  <BookmarkButton
+                    offerId={currentOffer.id}
+                    className="offer"
+                    width={31}
+                    height={33}
+                  />
+                )}
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">

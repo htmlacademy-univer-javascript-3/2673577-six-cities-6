@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {OfferListItems} from '../../types/offer-list-item.ts';
-import {fetchOffersAction} from '../api-actions.ts';
+import {fetchOffersAction, changeFavoriteStatusAction} from '../api-actions.ts';
 
 type OffersDataState = {
   offers: OfferListItems;
@@ -37,6 +37,15 @@ export const offersData = createSlice({
       })
       .addCase(fetchOffersAction.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(changeFavoriteStatusAction.fulfilled, (state, action) => {
+        const updatedOffer = action.payload;
+        state.offers = state.offers.map((offer) =>
+          offer.id === updatedOffer.id ? updatedOffer : offer
+        );
+        state.originalOffers = state.originalOffers.map((offer) =>
+          offer.id === updatedOffer.id ? updatedOffer : offer
+        );
       });
   },
 });

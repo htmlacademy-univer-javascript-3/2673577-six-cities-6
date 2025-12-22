@@ -35,7 +35,7 @@ const CityMap = memo((props: MapProps) => {
   const mapRef = useRef(null);
   const map = useMap(mapRef, selectedOffer?.city.location);
 
-  const selectedOfferId = useMemo(() => selectedOffer?.id, [selectedOffer?.id]);
+  const selectedOfferId = selectedOffer?.id;
 
   useEffect(() => {
     if (map) {

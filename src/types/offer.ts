@@ -19,6 +19,7 @@ export type Offer = {
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
+  previewImage: string;
   description: string;
   bedrooms: number;
   goods: [string];

@@ -2,6 +2,7 @@ import React from 'react';
 import {SortingOptions} from '../sorting-options/sorting-options.tsx';
 import {PlacesFound} from '../places-found/places-found.tsx';
 import {OffersList} from '../offers-list/offers-list.tsx';
+import {MainEmpty} from '../main-empty/main-empty.tsx';
 import {OfferListItem, OfferListItems} from '../../types/offer-list-item.ts';
 
 type PlacesSectionProps = {
@@ -15,12 +16,18 @@ export const PlacesSection = React.memo<PlacesSectionProps>(
   ({ offers, count, city, onMouseOverOffer }) => (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <PlacesFound count={count} city={city} />
-      <SortingOptions/>
-      <OffersList
-        offers={offers}
-        onMouseOverOffer={onMouseOverOffer}
-      />
+      {count > 0 ? (
+        <>
+          <PlacesFound count={count} city={city} />
+          <SortingOptions/>
+          <OffersList
+            offers={offers}
+            onMouseOverOffer={onMouseOverOffer}
+          />
+        </>
+      ) : (
+        <MainEmpty city={city} />
+      )}
     </section>
   ),
   (prevProps, nextProps) =>

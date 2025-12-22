@@ -1,12 +1,11 @@
 import {ListFavoritesCards} from '../../components/list-favorites-cards/list-favorites-cards.tsx';
-import {OfferListItems} from '../../types/offer-list-item.ts';
 import {Header} from '../../components/header/header.tsx';
+import {useAppSelector} from '../../hooks';
+import {selectFavorites} from '../../store/selectors.ts';
 
-type FavoritesScreenProps = {
-  offers: OfferListItems;
-}
+function FavoritesScreen() {
+  const favorites = useAppSelector(selectFavorites);
 
-function FavoritesScreen({offers}: FavoritesScreenProps) {
   return (
     <div className="page">
       <Header/>
@@ -15,11 +14,14 @@ function FavoritesScreen({offers}: FavoritesScreenProps) {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-
-            <ListFavoritesCards offers={[...offers].sort((a, b) => a.city.name.localeCompare(b.city.name))}/>
-
-            <ul className="favorites__list">
-            </ul>
+            {favorites.length > 0 ? (
+              <ListFavoritesCards offers={[...favorites].sort((a, b) => a.city.name.localeCompare(b.city.name))}/>
+            ) : (
+              <div className="favorites__status-wrapper">
+                <b className="favorites__status">Nothing yet saved.</b>
+                <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              </div>
+            )}
           </section>
         </div>
       </main>
